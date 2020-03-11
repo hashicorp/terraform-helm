@@ -1,0 +1,88 @@
+# The deployment for running the sync-catalog pod
+{{- if (or (and (ne (.Values.syncWorkspace.enabled | toString) "-") .Values.syncWorkspace.enabled) (and (eq (.Values.syncWorkspace.enabled | toString) "-") .Values.global.enabled)) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "terraform.fullname" . }}-sync-workspace
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "terraform.name" . }}
+    chart: {{ template "terraform.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ template "terraform.name" . }}
+      chart: {{ template "terraform.chart" . }}
+      release: {{ .Release.Name }}
+      component: sync-workspace
+  template:
+    metadata:
+      labels:
+        app: {{ template "terraform.name" . }}
+        chart: {{ template "terraform.chart" . }}
+        release: {{ .Release.Name }}
+        component: sync-workspace
+    spec:
+      serviceAccountName: {{ template "terraform.fullname" . }}-sync-workspace
+      containers:
+        - name: terraform-sync-workspace
+          image: "{{ default .Values.global.imageK8S .Values.syncWorkspace.image }}"
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPERATOR_NAME
+              value: "terraform-k8s"
+            - name: TF_CLI_CONFIG_FILE
+              value: "/etc/terraform/.terraformrc"
+          volumeMounts:
+          - name: terraformrc
+            mountPath: "/etc/terraform"
+            readOnly: true
+          - name: sensitivevars
+            mountPath: "/tmp/secrets"
+            readOnly: true
+          command:
+            - "/bin/sh"
+            - "-ec"
+            - |
+              terraform-k8s sync-workspace \
+                --k8s-watch-namespace="{{ default .Release.Namespace .Values.syncWorkspace.k8WatchNamespace}}" \
+                {{- if .Values.syncWorkspace.logLevel }}
+                --zap-level={{ .Values.syncWorkspace.logLevel }} \
+                {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 8383
+              scheme: HTTP
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 8383
+              scheme: HTTP
+            failureThreshold: 5
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+      volumes:
+        - name: terraformrc
+          secret:
+            secretName: {{ required "secret name for terraformrc file required" .Values.syncWorkspace.terraformRC.secretName }}
+            items:
+            - key: {{ required "secret key for terraformrc file required" .Values.syncWorkspace.terraformRC.secretKey }}
+              path: ".terraformrc"
+        - name: sensitivevars
+          secret:
+            secretName: {{ required "secret name for sensitive workspace variables required" .Values.syncWorkspace.sensitiveVariables.secretName }}
+{{- end }}

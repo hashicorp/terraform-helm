@@ -1,0 +1,28 @@
+{{- if .Values.tests.enabled }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ template "terraform.fullname" . }}-test"
+  labels:
+    app: {{ template "terraform.name" . }}
+    chart: {{ template "terraform.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: terraform-test
+      image: "{{ .Values.global.imageK8S }}"
+      env:
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+      command:
+        - "/bin/sh"
+        - "-ec"
+        - |
+            terraform-k8s version
+  restartPolicy: Never
+{{- end }}

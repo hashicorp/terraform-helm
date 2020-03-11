@@ -1,0 +1,69 @@
+{{- $syncEnabled := (or (and (ne (.Values.syncWorkspace.enabled | toString) "-") .Values.syncWorkspace.enabled) (and (eq (.Values.syncWorkspace.enabled | toString) "-") .Values.global.enabled)) }}
+{{- if $syncEnabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "terraform.fullname" . }}-sync-workspace
+  labels:
+    app: {{ template "terraform.name" . }}
+    chart: {{ template "terraform.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}    
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  - services
+  - services/finalizers
+  - endpoints
+  - persistentvolumeclaims
+  - events
+  - configmaps
+  - secrets
+  verbs:
+  - '*'
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  - daemonsets
+  - replicasets
+  - statefulsets
+  verbs:
+  - '*'
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  verbs:
+  - get
+  - create
+- apiGroups:
+  - apps
+  resourceNames:
+  - terraform-k8s
+  resources:
+  - deployments/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+- apiGroups:
+  - apps
+  resources:
+  - replicasets
+  verbs:
+  - get
+- apiGroups:
+  - app.terraform.io
+  resources:
+  - '*'
+  - workspaces
+  verbs:
+  - '*'
+{{- end }}

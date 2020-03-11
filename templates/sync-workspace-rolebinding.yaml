@@ -1,0 +1,19 @@
+{{- $syncEnabled := (or (and (ne (.Values.syncWorkspace.enabled | toString) "-") .Values.syncWorkspace.enabled) (and (eq (.Values.syncWorkspace.enabled | toString) "-") .Values.global.enabled)) }}
+{{- if $syncEnabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ template "terraform.fullname" . }}-sync-workspace
+  labels:
+    app: {{ template "terraform.name" . }}
+    chart: {{ template "terraform.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}    
+subjects:
+- kind: ServiceAccount
+  name: {{ template "terraform.fullname" . }}-sync-workspace
+roleRef:
+  kind: Role
+  name: {{ template "terraform.fullname" . }}-sync-workspace
+  apiGroup: rbac.authorization.k8s.io
+{{- end }}

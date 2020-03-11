@@ -1,0 +1,9 @@
+apiVersion: v1
+name: terraform
+version: 0.1.0
+description: Install and configure Terraform Cloud Operator on Kubernetes.
+home: https://www.terraform.io
+sources:
+  - https://github.com/hashicorp/terraform
+  - https://github.com/hashicorp/terraform-helm
+  - https://github.com/hashicorp/terraform-k8s

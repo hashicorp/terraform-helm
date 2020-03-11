@@ -1,0 +1,42 @@
+---
+apiVersion: app.terraform.io/v1alpha1
+kind: Workspace
+metadata:
+  name: greetings
+spec:
+  organization: hashicorp-team-demo
+  secretsMountPath: "/tmp/secrets"
+  module:
+    source: "terraform-aws-modules/sqs/aws"
+    version: "2.0.0"
+  outputs:
+    - key: url
+      moduleOutputName: this_sqs_queue_id
+    - key: arn
+      moduleOutputName: this_sqs_queue_arn
+  variables:
+    - key: name
+      value: greetings.fifo
+      sensitive: false
+      environmentVariable: false
+    - key: fifo_queue
+      value: "true"
+      sensitive: false
+      environmentVariable: false
+    - key: AWS_DEFAULT_REGION
+      valueFrom:
+        configMapKeyRef:
+          name: aws-configuration
+          key: region
+      sensitive: false
+      environmentVariable: true
+    - key: AWS_ACCESS_KEY_ID
+      sensitive: true
+      environmentVariable: true
+    - key: AWS_SECRET_ACCESS_KEY
+      sensitive: true
+      environmentVariable: true
+    - key: CONFIRM_DESTROY
+      value: "1"
+      sensitive: false
+      environmentVariable: true
