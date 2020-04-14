@@ -1,3 +1,8 @@
+## 0.1.5-alpha (May 20, 2020)
+
+* Update Helm chart to support Terraform Enterprise
+* Update terraform-k8s to v0.1.5-alpha
+
 ## 0.1.4-alpha (May 14, 2020)
 
 * Update Helm chart to pass TF_VERSION override

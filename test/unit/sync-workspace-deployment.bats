@@ -69,6 +69,56 @@ load _helpers
 }
 
 #--------------------------------------------------------------------
+# imagePullPolicy
+
+@test "syncWorkspace/Deployment: imagePullPolicy defaults to IfNotPresent" {
+  cd `chart_dir`
+  local actual=$(helm template \
+      --show-only templates/sync-workspace-deployment.yaml  \
+      --set 'global.imageK8S=bar' \
+      --set 'syncWorkspace.enabled=true' \
+      . | tee /dev/stderr |
+      yq -r '.spec.template.spec.containers[0].imagePullPolicy' | tee /dev/stderr)
+  [ "${actual}" = "IfNotPresent" ]
+}
+
+@test "syncWorkspace/Deployment: imagePullPolicy can be overridden with syncWorkspace.imagePullPolicy" {
+  cd `chart_dir`
+  local actual=$(helm template \
+      --show-only templates/sync-workspace-deployment.yaml  \
+      --set 'global.imageK8S=foo' \
+      --set 'syncWorkspace.enabled=true' \
+      --set 'syncWorkspace.imagePullPolicy=Never' \
+      . | tee /dev/stderr |
+      yq -r '.spec.template.spec.containers[0].imagePullPolicy' | tee /dev/stderr)
+  [ "${actual}" = "Never" ]
+}
+
+#--------------------------------------------------------------------
+# tfe address
+
+@test "syncWorkspace/Deployment: tfe address defaults to blank string" {
+  cd `chart_dir`
+  local actual=$(helm template \
+      --show-only templates/sync-workspace-deployment.yaml  \
+      --set 'syncWorkspace.enabled=true' \
+      . | tee /dev/stderr |
+      yq -r '.spec.template.spec.containers[0].env[4].value' | tee /dev/stderr)
+  [ "${actual}" = "" ]
+}
+
+@test "syncWorkspace/Deployment: tfe address defaults to tfe.local" {
+  cd `chart_dir`
+  local actual=$(helm template \
+      --show-only templates/sync-workspace-deployment.yaml  \
+      --set 'syncWorkspace.enabled=true' \
+      --set 'syncWorkspace.tfeAddress=https://tfe.local' \
+      . | tee /dev/stderr |
+      yq -r '.spec.template.spec.containers[0].env[4].value' | tee /dev/stderr)
+  [ "${actual}" = "https://tfe.local" ]
+}
+
+#--------------------------------------------------------------------
 # watch namespace
 
 @test "syncWorkspace/Deployment: watch namespace defaults to release namespace" {

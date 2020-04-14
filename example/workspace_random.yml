@@ -1,0 +1,36 @@
+---
+apiVersion: app.terraform.io/v1alpha1
+kind: Workspace
+metadata:
+  name: "random"
+spec:
+  organization: tf-operator
+  secretsMountPath: "/tmp/secrets"
+  module:
+    source: "joatmon08/hello/random"
+    version: "5.0.0"
+  outputs:
+    - key: pet
+      moduleOutputName: pet
+    - key: list_of_pets
+      moduleOutputName: list_of_pets
+    - key: quoted_some_key
+      moduleOutputName: quoted_some_key
+  variables:
+    - key: hellos
+      value: |
+        {
+          hello="world"
+          second_hello="universe"
+        }
+      hcl: true
+      sensitive: false
+      environmentVariable: false
+    - key: some_key
+      sensitive: false
+      value: '"something"'
+      environmentVariable: false
+    - key: CONFIRM_DESTROY
+      value: "1"
+      sensitive: false
+      environmentVariable: true

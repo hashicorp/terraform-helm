@@ -45,7 +45,7 @@ To run the acceptance tests:
 
 You can edit two parameters as part of the acceptance tests.
 
-* `TERRAFORM_CREDENTIALS` environment variable. This is the file path to the Terraform
+* `TF_CLI_CONFIG_FILE` environment variable. This is the file path to the Terraform
   Cloud credentials you want to use. By default, it will use `${HOME}/.terraformrc`.
 
 * `test/acceptance/values.yaml` with `test.organization` defined. By default, it will
