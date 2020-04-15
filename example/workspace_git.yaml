@@ -20,6 +20,16 @@ spec:
       value: preprod
       sensitive: false
       environmentVariable: false
+    - key: some_list
+      value: '["hello","queues"]'
+      hcl: true
+      sensitive: false
+      environmentVariable: false
+    - key: some_object
+      value: '{hello={name= "test"}}'
+      hcl: true
+      sensitive: false
+      environmentVariable: false
     - key: AWS_DEFAULT_REGION
       valueFrom:
         configMapKeyRef:
