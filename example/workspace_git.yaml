@@ -9,10 +9,8 @@ spec:
   module:
     source: "git::https://github.com/joatmon08/queues.git"
   outputs:
-    - key: queue_url
-      moduleOutputName: application_queue_url
-    - key: dlq_url
-      moduleOutputName: application_dlq_url
+    - key: queue_urls
+      moduleOutputName: queue_urls
   variables:
     - key: application
       value: goodbye
