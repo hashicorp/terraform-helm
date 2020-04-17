@@ -11,6 +11,8 @@ spec:
   outputs:
     - key: queue_urls
       moduleOutputName: queue_urls
+    - key: json_string
+      moduleOutputName: json_string
   variables:
     - key: application
       value: goodbye
@@ -18,6 +20,16 @@ spec:
       environmentVariable: false
     - key: environment
       value: preprod
+      sensitive: false
+      environmentVariable: false
+    - key: some_list
+      value: '["hello","queues"]'
+      hcl: true
+      sensitive: false
+      environmentVariable: false
+    - key: some_object
+      value: '{hello={name= "test"}}'
+      hcl: true
       sensitive: false
       environmentVariable: false
     - key: AWS_DEFAULT_REGION
