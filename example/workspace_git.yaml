@@ -4,6 +4,8 @@ kind: Workspace
 metadata:
   name: salutations
 spec:
+  # Optional field for SSH Key ID. To get the id you need to list the keys using the API: https://www.terraform.io/docs/cloud/api/ssh-keys.html#list-ssh-keys.
+  # sshKeyID: sshkey-D4fmNfDCWAoBJopq
   organization: hashicorp-team-demo
   secretsMountPath: "/tmp/secrets"
   module:
