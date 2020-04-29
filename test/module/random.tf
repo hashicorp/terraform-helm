@@ -6,15 +6,15 @@ variable "hellos" {
   description = "list of hellos"
 }
 
-variable "secret_key" {
+variable "some_key" {
   type        = string
-  description = "this is a secret"
+  description = "this is a some key"
 }
 
 resource "random_pet" "server" {
   keepers = {
     hello      = var.hellos.hello
-    secret_key = var.secret_key
+    secret_key = var.some_key
   }
 }
 
