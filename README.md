@@ -53,11 +53,6 @@ then be installed directly:
 
     helm install -n ${RELEASE_NAMESPACE} ${RELEASE_NAME} ./terraform-helm
 
-By default, the Helm chart is disabled. To enable the chart and deploy it successfully,
-set the variables in the `values.yaml`.
-
-    helm install -n ${RELEASE_NAMESPACE} ${RELEASE_NAME} ./terraform-helm --set="global.enabled=true"
-
 Please see the many options supported in the `values.yaml`
 file.
 

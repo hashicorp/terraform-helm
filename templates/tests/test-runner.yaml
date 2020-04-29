@@ -9,7 +9,9 @@ metadata:
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
   annotations:
-    "helm.sh/hook": test-success
+    "helm.sh/hook": test
+    "helm.sh/hook-weight": "2"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
 spec:
   containers:
     - name: terraform-test
@@ -19,10 +21,30 @@ spec:
           valueFrom:
             fieldRef:
               fieldPath: status.hostIP
+      volumeMounts:
+        - name: terraformrc
+          mountPath: "/etc/terraform"
+          readOnly: true
+        - name: backend
+          mountPath: "/tmp/terraform-test"
+          readOnly: true
       command:
         - "/bin/sh"
         - "-ec"
         - |
-            terraform-k8s version
+            sleep 60
+            terraform init -backend-config=/tmp/terraform-test/backend
+            terraform output pet
+            terraform output list_of_pets
   restartPolicy: Never
+  volumes:
+    - name: terraformrc
+      secret:
+        secretName: {{ required "secret name for terraformrc file required" .Values.syncWorkspace.terraformRC.secretName }}
+        items:
+        - key: {{ required "secret key for terraformrc file required" .Values.syncWorkspace.terraformRC.secretKey }}
+          path: ".terraformrc"
+    - name: backend
+      configMap:
+        name: "{{ template "terraform.fullname" . }}-test"
 {{- end }}

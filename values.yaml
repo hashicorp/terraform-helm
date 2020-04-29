@@ -49,3 +49,6 @@ syncWorkspace:
 # is only useful when running helm template.
 tests:
   enabled: true
+  organization: tf-operator
+  # moduleSource defaults to this repository.
+  # moduleSource: git::https://github.com/hashicorp/terraform-helm.git//test/module

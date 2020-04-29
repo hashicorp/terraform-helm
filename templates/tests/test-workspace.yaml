@@ -1,0 +1,47 @@
+{{- if .Values.tests.enabled }}
+---
+apiVersion: app.terraform.io/v1alpha1
+kind: Workspace
+metadata:
+  name: "{{ template "terraform.fullname" . }}-test"
+  labels:
+    app: {{ template "terraform.name" . }}
+    chart: {{ template "terraform.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  organization: "{{ .Values.tests.organization }}"
+  secretsMountPath: "/tmp/secrets"
+  module:
+    source: "{{ default "git::https://github.com/hashicorp/terraform-helm.git//test/module" .Values.tests.moduleSource }}"
+  outputs:
+    - key: pet
+      moduleOutputName: pet
+    - key: list_of_pets
+      moduleOutputName: list_of_pets
+  variables:
+    - key: hellos
+      value: |
+        {
+          hello="world"
+          second_hello="universe"
+        }
+      hcl: true
+      sensitive: false
+      environmentVariable: false
+    - key: some_key
+      valueFrom:
+        configMapKeyRef:
+          name: "{{ template "terraform.fullname" . }}-test"
+          key: some_key
+      sensitive: false
+      environmentVariable: false
+    - key: CONFIRM_DESTROY
+      value: "1"
+      sensitive: false
+      environmentVariable: true
+{{- end }}
