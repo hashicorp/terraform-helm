@@ -2,13 +2,13 @@
 
 load _helpers
 
-@test "syncWorkspace/Deployment: disabled by default" {
+@test "syncWorkspace/Deployment: enabled by default" {
   cd `chart_dir`
   local actual=$(helm template \
       -x templates/sync-workspace-deployment.yaml  \
       . | tee /dev/stderr |
       yq 'length > 0' | tee /dev/stderr)
-  [ "${actual}" = "false" ]
+  [ "${actual}" = "true" ]
 }
 
 @test "syncWorkspace/Deployment: enable with global.enabled false" {

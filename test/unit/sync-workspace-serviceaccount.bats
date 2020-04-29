@@ -2,13 +2,13 @@
 
 load _helpers
 
-@test "syncWorkspace/ServiceAccount: disabled by default" {
+@test "syncWorkspace/ServiceAccount: enabled by default" {
   cd `chart_dir`
   local actual=$(helm template \
       -x templates/sync-workspace-serviceaccount.yaml  \
       . | tee /dev/stderr |
       yq 'length > 0' | tee /dev/stderr)
-  [ "${actual}" = "false" ]
+  [ "${actual}" = "true" ]
 }
 
 @test "syncWorkspace/ServiceAccount: disabled with global.enabled=false" {

@@ -2,13 +2,13 @@
 
 load _helpers
 
-@test "syncWorkspace/Role: disabled by default" {
+@test "syncWorkspace/Role: enabled by default" {
   cd `chart_dir`
   local actual=$(helm template \
       -x templates/sync-workspace-role.yaml  \
       . | tee /dev/stderr |
       yq 'length > 0' | tee /dev/stderr)
-  [ "${actual}" = "false" ]
+  [ "${actual}" = "true" ]
 }
 
 @test "syncWorkspace/Role: disabled with global.enabled=false" {

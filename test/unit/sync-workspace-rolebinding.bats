@@ -2,13 +2,13 @@
 
 load _helpers
 
-@test "syncWorkspace/RoleBinding: disabled by default" {
+@test "syncWorkspace/RoleBinding: enabled by default" {
   cd `chart_dir`
   local actual=$(helm template \
       -x templates/sync-workspace-rolebinding.yaml  \
       . | tee /dev/stderr |
       yq 'length > 0' | tee /dev/stderr)
-  [ "${actual}" = "false" ]
+  [ "${actual}" = "true" ]
 }
 
 @test "syncWorkspace/RoleBinding: disabled with global.enabled=false" {
