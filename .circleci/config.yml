@@ -1,0 +1,16 @@
+version: 2
+jobs:
+  unit:
+    docker:
+      - image: hashicorpdev/terraform-helm-test:0.1.0
+    steps:
+      - checkout
+      - run:
+          name: Run Unit Tests
+          command: bats ./test/unit
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - unit
