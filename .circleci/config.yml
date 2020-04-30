@@ -1,0 +1,38 @@
+version: 2
+jobs:
+  unit:
+    docker:
+      - image: hashicorpdev/terraform-helm-test:0.1.0
+    steps:
+      - checkout
+      - run:
+          name: Run Unit Tests
+          command: bats ./test/unit
+  update-helm-charts-index:
+    docker:
+      - image: circleci/golang:latest
+    steps:
+      - run:
+          name: update helm-charts index
+          command: |
+            curl --show-error --silent --fail --user "${CIRCLE_TOKEN}:" \
+                -X POST \
+                -H 'Content-Type: application/json' \
+                -H 'Accept: application/json' \
+                -d "{\"branch\": \"master\",\"parameters\":{\"SOURCE_REPO\": \"${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}\",\"SOURCE_TAG\": \"${CIRCLE_TAG}\"}}" \
+                "${CIRCLE_ENDPOINT}/${CIRCLE_PROJECT}/pipeline"
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - unit
+  update-helm-charts-index:
+    jobs:
+      - update-helm-charts-index:
+          context: helm-charts-trigger
+          filters:
+            tags:
+              only: /^v.*/ # only triggers updating of the helm index on tags
+            branches:
+              ignore: /.*/ # don't trigger helm index update on any branch

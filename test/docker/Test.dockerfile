@@ -6,11 +6,11 @@
 # a script to configure kubectl, potentially install Helm, and run the tests
 # manually. This image only has the dependencies pre-installed.
 
-FROM alpine:latest
+FROM alpine/helm:3.2.0
 WORKDIR /root
 
 ENV BATS_VERSION "1.1.0"
-ENV TERRAFORM_VERSION "0.12.10"
+ENV TERRAFORM_VERSION "0.12.24"
 
 # base packages
 RUN apk update && apk add --no-cache --virtual .build-deps \
@@ -25,7 +25,7 @@ RUN apk update && apk add --no-cache --virtual .build-deps \
     jq
 
 # yq
-RUN pip install yq
+RUN pip install --no-cache-dir yq
 
 # gcloud
 RUN curl -OL https://dl.google.com/dl/cloudsdk/channels/rapid/install_google_cloud_sdk.bash && \
@@ -35,17 +35,16 @@ RUN curl -OL https://dl.google.com/dl/cloudsdk/channels/rapid/install_google_clo
 # terraform
 RUN curl -sSL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o /tmp/tf.zip \
     && unzip /tmp/tf.zip  \
-    && ln -s /root/terraform /usr/local/bin/terraform
+    && ln -s /root/terraform /usr/local/bin/terraform \
+    && rm /tmp/tf.zip
 
 # kubectl
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
     chmod +x ./kubectl && \
     mv ./kubectl /usr/local/bin/kubectl
 
-# helm
-RUN curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
-
 # bats
 RUN curl -sSL https://github.com/bats-core/bats-core/archive/v${BATS_VERSION}.tar.gz -o /tmp/bats.tgz \
     && tar -zxf /tmp/bats.tgz -C /tmp \
-    && /bin/bash /tmp/bats-core-${BATS_VERSION}/install.sh /usr/local
+    && /bin/bash /tmp/bats-core-${BATS_VERSION}/install.sh /usr/local \
+    && rm -rf /tmp/bats*
