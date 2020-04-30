@@ -43,6 +43,14 @@ To run the acceptance tests:
 
     bats ./test/acceptance
 
+You can edit two parameters as part of the acceptance tests.
+
+* `TERRAFORM_CREDENTIALS` environment variable. This is the file path to the Terraform
+  Cloud credentials you want to use. By default, it will use `${HOME}/.terraformrc`.
+
+* `test/acceptance/values.yaml` with `test.organization` defined. By default, it will
+  use the organization value in the top-level `values.yaml` of the chart.
+
 If the acceptance tests fail, deployed resources in the Kubernetes cluster
 may not be properly cleaned up. We recommend recycling the Kubernetes cluster to
 start from a clean slate.
