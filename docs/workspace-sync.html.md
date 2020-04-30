@@ -1,8 +1,8 @@
 # Syncing Kubernetes and Terraform Cloud Workspaces
 
 The [Terraform Operator for
-Kubernetes](https://github.com/hashicorp/terraform-k8s) allows you to define a a
-Workspace Custom Resource in Kubernetes that automatically syncs workspace
+Kubernetes](https://github.com/hashicorp/terraform-k8s) allows you to define a
+`Workspace` Custom Resource in Kubernetes that automatically syncs workspace
 definitions in Kubernetes to workspaces in Terraform Cloud, using the Kubernetes
 [Operator
 pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/). You
@@ -12,7 +12,7 @@ can automatically install and configure the terraform-k8s project using the
 **Why create a Terraform Cloud Workspace Custom Resource Definition (CRD) for
 Kubernetes?** The Terraform Cloud Workspace CRD allows applications deployed in
 Kubernetes to define their own infrastructure configuration using Kubernetes
-workspaces. The functionality depends on Terraform Cloud to ensure consistent
+resources. The functionality depends on Terraform Cloud to ensure consistent
 approaches to state locking, state storage, and execution.
 
 **Why sync Kubernetes workspaces to Terraform Cloud?** Syncing Kubernetes
@@ -57,20 +57,20 @@ authentication.
    `https://app.terraform.io/app/$ORGANIZATION/settings/teams`, where
    `$ORGANIZATION` is your organization name.
 
-1. Create a file named `credentials` in a memorable directory.
+1. Create a file for storing the API token and open it in a text editor.
 
 1. Insert the generated token (`$TERRAFORM_CLOUD_API_TOKEN`) into the
-   `credentials` formatted for Terraform credentials.
+   text file formatted for Terraform credentials.
    ```hcl
    credentials app.terraform.io {
      token = "$TERRAFORM_CLOUD_API_TOKEN"
    }
    ```
 
-1. Create a Kubernetes secret named `terraformrc` for the namespace from the
-   `credentials` file.
+1. Create a Kubernetes secret named `terraformrc` in the namespace.
+   Reference the credentials file (`$FILENAME`) created in the previous step.
    ```shell
-   $ kubectl create -n $NAMESPACE secret generic terraformrc --from-file=credentials
+   $ kubectl create -n $NAMESPACE secret generic terraformrc --from-file=credentials=$FILENAME
    ```
    Ensure `terraformrc` is the name of the secret, as it is the default secret
    name defined under the Helm value `syncWorkspace.terraformRC.secretName` in
@@ -207,7 +207,7 @@ module "operator" {
 The operator pushes the values of the variables to the Terraform Cloud
 workspace. For secrets, set `sensitive` to be `true`. The workspace sets them as
 write-only. Denote workspace environment variables by setting
-`environmentVariable` as `true`. 
+`environmentVariable` as `true`.
 
 Sensitive variables should already be
 initialized as per
@@ -220,6 +220,19 @@ variables:
   - key: AWS_SECRET_ACCESS_KEY
     sensitive: true
     environmentVariable: true
+```
+
+### Apply an SSH key to the Workspace (optional)
+
+SSH keys can be used to [clone private modules](https://www.terraform.io/docs/cloud/workspaces/ssh-keys.html). To apply an SSH key to the workspace, specify `sshKeyID` in the Workspace Custom Resource. The SSH key ID can be found in the [Terraform Cloud API](https://www.terraform.io/docs/cloud/api/ssh-keys.html#list-ssh-keys).
+
+```
+apiVersion: app.terraform.io/v1alpha1
+kind: Workspace
+metadata:
+  name: $WORKSPACE
+spec:
+   sshKeyID: $SSHKEYID
 ```
 
 ### Outputs
