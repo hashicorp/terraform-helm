@@ -1,3 +1,8 @@
+## Unreleased
+
+* Update Helm chart to pass TF_VERSION override
+* Update terraform-k8s to v0.1.4-alpha
+
 ## 0.1.3-alpha
 
 * Update terraform-k8s to v0.1.3-alpha
