@@ -109,6 +109,15 @@ control to these secrets must be enforced by [Kubernetes Role-Based Access
 Control (RBAC)](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
 policies.
 
+### Terraform Version
+
+By default, the Operator will create a Terraform Cloud/Enterprise workspace with
+[a pinned version](https://github.com/hashicorp/terraform-k8s/blob/master/operator/version/version.go)
+of Terraform.
+
+Override the Terraform version that will be set for the workspace by changing the
+Helm value `syncWorkspace.terraformVersion` to the Terraform version of choice.
+
 ## Deploy the Operator
 
 Use the [Helm chart](https://github.com/hashicorp/terraform-helm) repository to
