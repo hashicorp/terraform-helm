@@ -30,6 +30,7 @@ spec:
       containers:
         - name: terraform-sync-workspace
           image: "{{ default .Values.global.imageK8S .Values.syncWorkspace.image }}"
+          imagePullPolicy: "{{ default "IfNotPresent" .Values.syncWorkspace.imagePullPolicy }}"
           env:
             - name: POD_NAME
               valueFrom:
@@ -37,6 +38,10 @@ spec:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
               value: "terraform-k8s"
+            {{- if .Values.syncWorkspace.terraformVersion }}
+            - name: TF_VERSION
+              value: "{{ .Values.syncWorkspace.terraformVersion }}"
+            {{- end }}
             - name: TF_CLI_CONFIG_FILE
               value: "/etc/terraform/.terraformrc"
           volumeMounts:

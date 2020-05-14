@@ -1,0 +1,9 @@
+# Parameters used for testing operator in development
+# run with `helm install -f values.yml -f values.dev.yaml .`
+
+global:
+  imageK8S: "terraform-k8s-dev:latest"
+  imagePullPolicy: "Never"
+
+syncWorkspace:
+  terraformVersion: 0.12.25
