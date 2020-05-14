@@ -30,6 +30,11 @@ syncWorkspace:
   # to the release namespace
   k8WatchNamespace: null
 
+  # terraformVersion describes the version of Terraform to use for each workspace.
+  # If this is not set then it will default to the latest version of Terraform
+  # compiled with the operator.
+  terraformVersion: null
+
   # Log verbosity level. One of "trace", "debug", "info", "warn", or "error".
   # Defaults to "info".
   logLevel: null

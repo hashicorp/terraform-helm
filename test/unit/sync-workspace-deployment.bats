@@ -93,6 +93,30 @@ load _helpers
 }
 
 #--------------------------------------------------------------------
+# terraform version
+
+@test "syncWorkspace/Deployment: terraform version defaults to operator-compiled" {
+  cd `chart_dir`
+  local actual=$(helm template \
+      --show-only templates/sync-workspace-deployment.yaml  \
+      --set 'syncWorkspace.enabled=true' \
+      . | tee /dev/stderr |
+      yq -r '.spec.template.spec.containers[0].env | any(contains("TF_VERSION"))' | tee /dev/stderr)
+  [ "${actual}" = "" ]
+}
+
+@test "syncWorkspace/Deployment: terraform version is TF_VERSION" {
+  cd `chart_dir`
+  local actual=$(helm template \
+      --show-only templates/sync-workspace-deployment.yaml  \
+      --set 'syncWorkspace.enabled=true' \
+      --set 'syncWorkspace.terraformVersion=0.11.1' \
+      . | tee /dev/stderr |
+      yq -r '.spec.template.spec.containers[0].env[2].value == "0.11.1"' | tee /dev/stderr)
+  [ "${actual}" = "true" ]
+}
+
+#--------------------------------------------------------------------
 # serviceAccount
 
 @test "syncWorkspace/Deployment: serviceAccount set when sync enabled" {

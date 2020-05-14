@@ -16,6 +16,7 @@ spec:
   containers:
     - name: terraform-test
       image: "{{ .Values.global.imageK8S }}"
+      imagePullPolicy: "{{ default "IfNotPresent" .Values.syncWorkspace.imagePullPolicy }}"
       env:
         - name: HOST_IP
           valueFrom:
