@@ -6,4 +6,4 @@ global:
   imagePullPolicy: "Never"
 
 syncWorkspace:
-  terraformVersion: 0.12.24
+  terraformVersion: 0.12.25
