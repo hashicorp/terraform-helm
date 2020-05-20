@@ -11,7 +11,7 @@ global:
   # imageK8S is the name (and tag) of the terraform-k8s Docker image that
   # is used for functionality such as workspace sync. This can be overridden
   # per component.
-  imageK8S: "hashicorp/terraform-k8s:0.1.4-alpha"
+  imageK8S: "hashicorp/terraform-k8s:0.1.5-alpha"
 
 # syncWorkspace will run the workspace sync process to sync K8S Workspaces with
 # Terraform Cloud workspaces.
@@ -33,7 +33,11 @@ syncWorkspace:
   # terraformVersion describes the version of Terraform to use for each workspace.
   # If this is not set then it will default to the latest version of Terraform
   # compiled with the operator.
-  terraformVersion: null
+  terraformVersion: latest
+  # tfeAddress denotes the address in the form of https://tfe.local for
+  # a Terraform Enterprise instance. If this is not set then it will default
+  # to Terraform Cloud (https://app.terraform.io)
+  tfeAddress: null
 
   # Log verbosity level. One of "trace", "debug", "info", "warn", or "error".
   # Defaults to "info".

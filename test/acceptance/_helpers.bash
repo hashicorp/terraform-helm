@@ -8,8 +8,8 @@ name_prefix() {
 # by CI or other environments to do test-specific overrides. Note that its
 # easily possible to break tests this way so be careful.
 helm_install() {
-    if test -f "${TERRAFORM_CREDENTIALS}"; then
-        kubectl create secret generic terraformrc --from-file=credentials=${TERRAFORM_CREDENTIALS}
+    if test -f "${TF_CLI_CONFIG_FILE}"; then
+        kubectl create secret generic terraformrc --from-file=credentials=${TF_CLI_CONFIG_FILE}
     else
         kubectl create secret generic terraformrc --from-file=credentials=${HOME}/.terraformrc
     fi
