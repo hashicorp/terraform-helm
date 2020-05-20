@@ -12,6 +12,7 @@ jobs:
     docker:
       - image: circleci/golang:latest
     steps:
+      - checkout
       - run:
           name: verify Chart version matches tag version
           command: |
