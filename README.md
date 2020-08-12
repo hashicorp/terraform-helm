@@ -1,10 +1,10 @@
-# Terraform Helm Chart
+# Terraform Cloud Operator Helm Chart
 
 > This experimental repository contains software which is still being developed
 > and in the alpha testing stage. It is not ready for production use.
 
 This repository contains the official HashiCorp Helm chart for installing
-and configuring Terraform on Kubernetes. This chart supports multiple use
+and configuring the Terraform Cloud Operator on Kubernetes. This chart supports multiple use
 cases of Terraform on Kubernetes depending on the values provided.
 
 ## Prerequisites
@@ -24,7 +24,7 @@ The versions required are:
 In addition to Helm, you must also have a:
 
   * **Terraform Cloud organization** - Create an organization on Terraform
-    Cloud.
+    Cloud/Enterprise.
   * **Terraform Cloud Team API Token** - Generate a
     [team API token](https://www.terraform.io/docs/cloud/users-teams-organizations/api-tokens.html) for the
     Terraform Cloud organization you want to use. Make sure the team at least
@@ -46,22 +46,18 @@ Before installing the chart, you must create two Kubernetes secrets:
    $ kubectl -n $NAMESPACE create secret generic workspacesecrets --from-literal=secret_key=abc123
    ```
 
- To use the charts, you must
-add the HashiCorp Helm Chart repository. You'll need to use the --devel flag for most helm commands since the chart is in alpha.
+ To use the charts, you must add the HashiCorp Helm Chart repository. You'll need to use the --devel flag for most helm commands since the chart is in alpha.
 
 ```shell
 $ helm repo add hashicorp https://helm.releases.hashicorp.com
 $ helm search repo hashicorp/terraform --devel
+$ helm install --devel --namespace ${RELEASE_NAMESPACE} hashicorp/terraform --generate-name
 ```
 ```
 NAME               	CHART VERSION	APP VERSION	DESCRIPTION
 hashicorp/terraform	0.1.3-alpha  	           	Install and configure Terraform Cloud Operator ...
 ```
-Assuming this repository was unpacked into the directory `terraform-helm`, the chart can
-then be installed directly:
-```shell
-$ helm install --devel --namespace ${RELEASE_NAMESPACE} hashicorp/terraform --generate-name
-```
+
 ```
 NAME: terraform-1589480669
 LAST DEPLOYED: Thu May 14 11:24:32 2020
@@ -95,6 +91,7 @@ behind.
 Note that the Helm chart automatically installs all Custom Resource Definitions under
 the `crds/` directory. As a result, any updates to the schema must be manually copied into
 the directory and removed from the Kubernetes cluster:
+
 ```shell
 $ kubectl delete crd workspaces.app.terraform.io
 ```
