@@ -47,6 +47,11 @@ spec:
             - name: TF_URL
               value: "{{ default "" .Values.syncWorkspace.tfeAddress }}"
           volumeMounts:
+          {{- if .Values.useCustomCA }}
+          - name: cacert
+            mountPath: "/etc/ssl/certs/"
+            readOnly: true
+          {{- end }}
           - name: terraformrc
             mountPath: "/etc/terraform"
             readOnly: true
@@ -83,6 +88,14 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
       volumes:
+        {{- if .Values.useCustomCA }}
+        - name: cacert
+          secret:
+            secretName: cacert
+            items:
+              - key: ca_file
+                path: "ca-certificates.crt"
+        {{- end }}
         - name: terraformrc
           secret:
             secretName: {{ required "secret name for terraformrc file required" .Values.syncWorkspace.terraformRC.secretName }}

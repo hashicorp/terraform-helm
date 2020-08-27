@@ -61,3 +61,9 @@ tests:
   organization: tf-operator
   # moduleSource defaults to this repository.
   # moduleSource: git::https://github.com/hashicorp/terraform-helm.git//test/module
+
+# Set useCustomCA to true if the TFE instance the operator talks to is using
+# a private CA. When this is set to true you should also create a secret called
+# cacert that contains a key named ca_file and contains all the CA certificates
+# the operator needs in PEM format.
+useCustomCA: false
