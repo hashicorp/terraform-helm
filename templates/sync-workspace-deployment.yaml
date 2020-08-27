@@ -47,7 +47,7 @@ spec:
             - name: TF_URL
               value: "{{ default "" .Values.syncWorkspace.tfeAddress }}"
           volumeMounts:
-          {{- if .Values.useCustomCA }}
+          {{- if .Values.CACerts}}
           - name: cacert
             mountPath: "/etc/ssl/certs/"
             readOnly: true
@@ -88,7 +88,7 @@ spec:
             successThreshold: 1
             timeoutSeconds: 5
       volumes:
-        {{- if .Values.useCustomCA }}
+        {{- if .Values.CACerts}}
         - name: cacert
           secret:
             secretName: cacert

@@ -62,8 +62,10 @@ tests:
   # moduleSource defaults to this repository.
   # moduleSource: git::https://github.com/hashicorp/terraform-helm.git//test/module
 
-# Set useCustomCA to true if the TFE instance the operator talks to is using
-# a private CA. When this is set to true you should also create a secret called
-# cacert that contains a key named ca_file and contains all the CA certificates
-# the operator needs in PEM format.
-useCustomCA: false
+# If the TFE instance the operator talks to is using a private CA then CACerts
+# can be used to install a custom CA bundle in the operator's container that 
+# will allow it to communicate with TFE.
+#
+# CACerts can be set like this:
+# helm install <other parameters> --set-file CACerts=/path/to/certs.pem
+CACerts: ""
