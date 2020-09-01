@@ -1,3 +1,7 @@
+## 0.1.6 alpha (Sep 01, 2020)
+
+* New option for setting a custom CA cert in the operator image
+
 ## 0.1.5-alpha (May 20, 2020)
 
 * Update Helm chart to support Terraform Enterprise
