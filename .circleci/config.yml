@@ -5,7 +5,7 @@ orbs:
 jobs:
   unit:
     docker:
-      - image: hashicorpdev/terraform-helm-test:0.1.0
+      - image: docker.mirror.hashicorp.services/hashicorpdev/terraform-helm-test:0.1.0
     steps:
       - checkout
       - run:
@@ -13,7 +13,7 @@ jobs:
           command: bats ./test/unit
   update-helm-charts-index:
     docker:
-      - image: circleci/golang:latest
+      - image: docker.mirror.hashicorp.services/circleci/golang:latest
     steps:
       - checkout
       - run:
