@@ -6,7 +6,7 @@
 # a script to configure kubectl, potentially install Helm, and run the tests
 # manually. This image only has the dependencies pre-installed.
 
-FROM alpine/helm:3.2.0
+FROM docker.mirror.hashicorp.services/alpine/helm:3.2.0
 WORKDIR /root
 
 ENV BATS_VERSION "1.1.0"
