@@ -31,8 +31,12 @@ spec:
         spec:
           description: WorkspaceSpec defines the desired state of Workspace
           properties:
+            agentPoolID:
+              description: Specifies the agent pool ID we wish to use.
+              type: string
             module:
               description: Module source and version to use
+              nullable: true
               properties:
                 source:
                   description: Any remote module source (version control, registry)
@@ -63,7 +67,13 @@ spec:
               description: File path within operator pod to load workspace secrets
               type: string
             sshKeyID:
-              description: SSH Key ID
+              description: SSH Key ID. This key must already exist in the TF Cloud
+                organization.  This can either be the user assigned name of the SSH
+                Key, or the system assigned ID.
+              type: string
+            terraformVersion:
+              description: Terraform version used for this workspace. The default
+                is `latest`.
               type: string
             variables:
               description: Variables as inputs to module
@@ -111,7 +121,8 @@ spec:
                       fieldRef:
                         description: 'Selects a field of the pod: supports metadata.name,
                           metadata.namespace, metadata.labels, metadata.annotations,
-                          spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP.'
+                          spec.nodeName, spec.serviceAccountName, status.hostIP, status.podIP,
+                          status.podIPs.'
                         properties:
                           apiVersion:
                             description: Version of the schema the FieldPath is written
@@ -169,14 +180,39 @@ spec:
                 - sensitive
                 type: object
               type: array
+            vcs:
+              description: Details of the VCS repository we want to connect to the
+                workspace
+              nullable: true
+              properties:
+                branch:
+                  description: The repository branch to use
+                  type: string
+                ingress_submodules:
+                  description: Whether submodules should be fetched when cloning the
+                    VCS repository (Defaults to false)
+                  type: boolean
+                repo_identifier:
+                  description: A reference to your VCS repository in the format org/repo
+                  type: string
+                token_id:
+                  description: Token ID of the VCS Connection (OAuth Connection Token)
+                    to use https://www.terraform.io/docs/cloud/vcs
+                  type: string
+              required:
+              - repo_identifier
+              - token_id
+              type: object
           required:
-          - module
           - organization
           - secretsMountPath
           type: object
         status:
           description: WorkspaceStatus defines the observed state of Workspace
           properties:
+            configVersionID:
+              description: Configuration Version ID
+              type: string
             outputs:
               description: Outputs from state file
               items:
@@ -200,6 +236,7 @@ spec:
               description: Workspace ID
               type: string
           required:
+          - configVersionID
           - runID
           - runStatus
           - workspaceID
