@@ -24,6 +24,14 @@ rules:
   verbs:
   - '*'
 - apiGroups:
+  - ""
+  resources:
+  - configmaps/status
+  verbs:
+  - get
+  - update
+  - patch
+- apiGroups:
   - apps
   resources:
   - deployments
