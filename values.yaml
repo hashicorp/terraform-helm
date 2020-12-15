@@ -25,6 +25,11 @@ syncWorkspace:
   enabled: "-"
   image: null
 
+  # If true it disables certificate validation for all outbound HTTPS connections
+  # the operator has to do. It can be used when connecting to TFE instances with
+  # self-signed certificates
+  insecure: false
+
   # k8WatchNamespace is the Kubernetes namespace to watch for workspace
   # changes and sync to Terraform Cloud. If this is not set then it will default
   # to the release namespace
