@@ -1,0 +1,22 @@
+apiVersion: app.terraform.io/v1alpha1
+kind: Workspace
+metadata:
+ name: demo
+spec:
+ organization: demo
+ secretsMountPath: "/tmp/secrets"
+ module:
+   source: "github.com/koikonom/terraform-nullresource-example"
+ vcs:
+   # Your OAuth Token ID can be found at https://app.terraform.io/app/<your org>/settings/version-control
+   token_id: "ot-<your vcs oauth token ID>"
+   repo_identifier: "koikonom/terraform-nullresource-example"
+   ingress_submodules: false  
+ variables:
+   - key: CONFIRM_DESTROY
+     value: "1"
+     sensitive: false
+     environmentVariable: true
+ outputs:
+   - key: pet
+     moduleOutputName: rofl
