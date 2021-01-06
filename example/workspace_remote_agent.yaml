@@ -1,0 +1,21 @@
+apiVersion: app.terraform.io/v1alpha1
+kind: Workspace
+metadata:
+ name: demo
+spec:
+ organization: demo
+ secretsMountPath: "/tmp/secrets"
+ module:
+   source: "github.com/koikonom/terraform-nullresource-example"
+ # The agent pool ID can be found either in the Agent Pool's config page
+ # (https://app.terraform.io/app/<your org>/settings/agents)
+ # or in the agent's startup messages        
+ agentPoolID: apool-<your agent pool ID>
+ variables:
+   - key: CONFIRM_DESTROY
+     value: "1"
+     sensitive: false
+     environmentVariable: true
+ outputs:
+   - key: pet
+     moduleOutputName: rofl

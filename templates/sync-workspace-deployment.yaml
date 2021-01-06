@@ -42,6 +42,10 @@ spec:
             - name: TF_VERSION
               value: "{{ .Values.syncWorkspace.terraformVersion }}"
             {{- end }}
+            {{- if .Values.syncWorkspace.insecure }}
+            - name: TF_INSECURE
+              value: "{{ .Values.syncWorkspace.insecure }}"
+            {{- end}}
             - name: TF_CLI_CONFIG_FILE
               value: "/etc/terraform/.terraformrc"
             - name: TF_URL

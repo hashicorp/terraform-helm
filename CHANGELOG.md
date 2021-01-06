@@ -1,3 +1,7 @@
+## 0.2.1 beta (Jan 06, 2021)
+
+* Update terraform-k8s to v0.2.1-beta
+
 ## 0.1.6 alpha (Sep 01, 2020)
 
 * New option for setting a custom CA cert in the operator image
