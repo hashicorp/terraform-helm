@@ -1,4 +1,4 @@
-## 0.2.1 beta (Dec 14, 2020)
+## 0.2.1 beta (Jan 06, 2021)
 
 * Update terraform-k8s to v0.2.1-beta
 
