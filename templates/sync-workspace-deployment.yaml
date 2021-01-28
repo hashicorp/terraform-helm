@@ -63,14 +63,10 @@ spec:
             mountPath: "/tmp/secrets"
             readOnly: true
           command:
-            - "/bin/sh"
-            - "-ec"
-            - |
-              terraform-k8s sync-workspace \
-                --k8s-watch-namespace="{{ default .Release.Namespace .Values.syncWorkspace.k8WatchNamespace}}" \
-                {{- if .Values.syncWorkspace.logLevel }}
-                --zap-level={{ .Values.syncWorkspace.logLevel }} \
-                {{- end }}
+            - /bin/terraform-k8s
+          args:
+            - --enable-leader-election
+            - --k8s-watch-namespace="{{ default .Release.Namespace .Values.syncWorkspace.k8WatchNamespace}}"
           livenessProbe:
             httpGet:
               path: /metrics
