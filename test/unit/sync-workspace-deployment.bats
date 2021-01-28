@@ -127,7 +127,7 @@ load _helpers
       --show-only templates/sync-workspace-deployment.yaml  \
       --set 'syncWorkspace.enabled=true' \
       . | tee /dev/stderr |
-      yq -r '.spec.template.spec.containers[0].command | any(contains("--k8s-watch-namespace=\"default\""))' | tee /dev/stderr)
+      yq -r '.spec.template.spec.containers[0].args | any(contains("--k8s-watch-namespace=\"default\""))' | tee /dev/stderr)
   [ "${actual}" = "true" ]
 }
 
@@ -138,7 +138,7 @@ load _helpers
       --set 'syncWorkspace.enabled=true' \
       --set 'syncWorkspace.k8WatchNamespace=dev' \
       . | tee /dev/stderr |
-      yq -r '.spec.template.spec.containers[0].command | any(contains("-k8s-watch-namespace=\"dev\""))' | tee /dev/stderr)
+      yq -r '.spec.template.spec.containers[0].args | any(contains("-k8s-watch-namespace=\"dev\""))' | tee /dev/stderr)
   [ "${actual}" = "true" ]
 }
 
