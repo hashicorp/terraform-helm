@@ -66,7 +66,7 @@ spec:
             - /bin/terraform-k8s
           args:
             - --enable-leader-election
-            - --k8s-watch-namespace="{{ default .Release.Namespace .Values.syncWorkspace.k8WatchNamespace}}"
+            - --k8s-watch-namespace={{ default .Release.Namespace .Values.syncWorkspace.k8WatchNamespace}}
           livenessProbe:
             httpGet:
               path: /metrics
