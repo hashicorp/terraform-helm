@@ -4,6 +4,8 @@ This repository contains the official HashiCorp Helm chart for installing
 and configuring the Terraform Cloud Operator on Kubernetes. This chart supports multiple use
 cases of Terraform on Kubernetes depending on the values provided.
 
+This chart is hosted on the official [HashiCorp helm chart repository](https://helm.releases.hashicorp.com).
+
 ## Prerequisites
 
 To use the charts here, [Helm](https://helm.sh/) must be installed in your
@@ -52,7 +54,7 @@ $ helm install --namespace ${RELEASE_NAMESPACE} hashicorp/terraform --generate-n
 ```
 ```
 NAME               	CHART VERSION	APP VERSION	DESCRIPTION
-hashicorp/terraform	0.1.3-alpha  	           	Install and configure Terraform Cloud Operator ...
+hashicorp/terraform	1.0  	           	Install and configure Terraform Cloud Operator ...
 ```
 
 ```
