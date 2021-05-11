@@ -47,7 +47,7 @@ workflows:
   update-helm-charts-index:
     jobs:
       - update-helm-charts-index:
-          context: helm-charts-trigger
+          context: helm-charts-trigger-terraform
           filters:
             tags:
               only: /^v.*/ # only triggers updating of the helm index on tags
