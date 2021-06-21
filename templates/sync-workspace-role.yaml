@@ -1,7 +1,11 @@
 {{- $syncEnabled := (or (and (ne (.Values.syncWorkspace.enabled | toString) "-") .Values.syncWorkspace.enabled) (and (eq (.Values.syncWorkspace.enabled | toString) "-") .Values.global.enabled)) }}
 {{- if $syncEnabled }}
 apiVersion: rbac.authorization.k8s.io/v1
+{{- if .Values.syncWorkspace.k8WatchNamespace }}
+kind: ClusterRole
+{{- else }}
 kind: Role
+{{- end }}
 metadata:
   name: {{ template "terraform.fullname" . }}-sync-workspace
   labels:
