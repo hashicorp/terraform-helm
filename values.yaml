@@ -11,7 +11,7 @@ global:
   # imageK8S is the name (and tag) of the terraform-k8s Docker image that
   # is used for functionality such as workspace sync. This can be overridden
   # per component.
-  imageK8S: "hashicorp/terraform-k8s:1.0.0"
+  imageK8S: "terraform-k8s:latest"
 
 # syncWorkspace will run the workspace sync process to sync K8S Workspaces with
 # Terraform Cloud workspaces.
@@ -44,9 +44,10 @@ syncWorkspace:
   # to Terraform Cloud (https://app.terraform.io)
   tfeAddress: null
 
-  # Log verbosity level. One of "trace", "debug", "info", "warn", or "error".
-  # Defaults to "info".
-  logLevel: null
+  # WARNING: logLevel not supported by terraform-k8s:1.0.0 version
+  # Uncomment to configure log verbosity level. One of "debug", "info", or "error".
+  # Defaults to "debug".
+  logLevel: error
 
   # Name and key of Kubernetes secret containing the Terraform CLI Configuration
   # Must have Terraform Cloud Team API Token 
