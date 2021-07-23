@@ -44,9 +44,10 @@ syncWorkspace:
   # to Terraform Cloud (https://app.terraform.io)
   tfeAddress: null
 
-  # Log verbosity level. One of "trace", "debug", "info", "warn", or "error".
-  # Defaults to "info".
-  logLevel: null
+  # WARNING: logLevel not supported by terraform-k8s:1.0.0 version, or earlier.
+  # Uncomment to configure log verbosity level. One of "debug", "info", or "error".
+  # Defaults to "debug".
+  # logLevel: error
 
   # Name and key of Kubernetes secret containing the Terraform CLI Configuration
   # Must have Terraform Cloud Team API Token 
