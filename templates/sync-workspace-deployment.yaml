@@ -67,6 +67,9 @@ spec:
           args:
             - --enable-leader-election
             - --k8s-watch-namespace={{ default .Release.Namespace .Values.syncWorkspace.k8WatchNamespace}}
+            {{- if .Values.syncWorkspace.logLevel }}
+            - --zap-log-level={{ .Values.syncWorkspace.logLevel }}
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /metrics
