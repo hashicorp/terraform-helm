@@ -11,7 +11,7 @@ global:
   # imageK8S is the name (and tag) of the terraform-k8s Docker image that
   # is used for functionality such as workspace sync. This can be overridden
   # per component.
-  imageK8S: "hashicorp/terraform-k8s:1.0.0"
+  imageK8S: "hashicorp/terraform-k8s:1.1.0"
 
 # syncWorkspace will run the workspace sync process to sync K8S Workspaces with
 # Terraform Cloud workspaces.
