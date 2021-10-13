@@ -1,12 +1,7 @@
 {{- $syncEnabled := (or (and (ne (.Values.syncWorkspace.enabled | toString) "-") .Values.syncWorkspace.enabled) (and (eq (.Values.syncWorkspace.enabled | toString) "-") .Values.global.enabled)) }}
 {{- if $syncEnabled }}
 apiVersion: rbac.authorization.k8s.io/v1
-{{- if not .Values.syncWorkspace.watchAllNamespaces }}
-{{- $kind := (ternary "Role" "ClusterRole" (or (empty .Values.syncWorkspace.k8WatchNamespace) (eq (.Values.syncWorkspace.k8WatchNamespace | toString) .Release.Namespace))) }}
-kind: {{ ternary "RoleBinding" "ClusterRoleBinding" (eq $kind "Role") }}
-{{- else }}
-kind: ClusterRoleBinding
-{{- end }}
+kind: {{ template "terraform.getRole" . }}Binding
 metadata:
   name: {{ template "terraform.fullname" . }}-sync-workspace
   labels:
@@ -19,7 +14,7 @@ subjects:
   name: {{ template "terraform.fullname" . }}-sync-workspace
   namespace: {{ .Release.Namespace }}
 roleRef:
-  kind: {{ $kind }}
+  kind: {{ template "terraform.getRole" . }}
   name: {{ template "terraform.fullname" . }}-sync-workspace
   apiGroup: rbac.authorization.k8s.io
 {{- end }}

@@ -59,3 +59,13 @@ Inject extra environment vars in the format key:value, if populated
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Comments
+*/}}
+{{- define "terraform.getRole" -}}
+{{- if .Values.syncWorkspace.watchAllNamespaces -}}
+{{- "ClusterRole" -}}
+{{- else -}}
+{{- (ternary "Role" "ClusterRole" (or (empty .Values.syncWorkspace.k8WatchNamespace) (eq (.Values.syncWorkspace.k8WatchNamespace | toString) .Release.Namespace))) -}}
+{{- end -}}
