@@ -69,3 +69,4 @@ Define the kind of Role to use
 {{- else -}}
 {{- (ternary "Role" "ClusterRole" (or (empty .Values.syncWorkspace.k8WatchNamespace) (eq (.Values.syncWorkspace.k8WatchNamespace | toString) .Release.Namespace))) -}}
 {{- end -}}
+{{- end -}}
