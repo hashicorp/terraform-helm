@@ -61,7 +61,7 @@ Inject extra environment vars in the format key:value, if populated
 {{- end -}}
 
 {{/*
-Comments
+Define the kind of Role to use
 */}}
 {{- define "terraform.getRole" -}}
 {{- if .Values.syncWorkspace.watchAllNamespaces -}}
