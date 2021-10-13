@@ -96,3 +96,53 @@ $ kubectl delete crd workspaces.app.terraform.io
 ```
 
 If the CRD is not updated correctly, you will not be able to create a Workspace Custom Resource.
+
+
+
+### Helm Chart
+
+The Helm chart consists of several components. The Kubernetes configurations associated with the Helm chart are located under `crds/` and `templates/`.
+
+#### Custom Resource Definition
+
+Helm starts by deploying the Custom Resource Definition for the Workspace. Custom Resource Definitions extend the Kubernetes API. It looks for definitions in the `crds/` of the chart.
+
+The Custom Resource Definition under `crds/app.terraform.io_workspaces_crd.yaml` defines that the Workspace Custom Resource schema.
+
+#### Role-Based Access Control
+
+In order to scope the operator to a namespace, Helm assigns a role and service account to the namespace. The role has access to Pods, Secrets, Services, and ConfigMaps. This configuration is located in `templates/`.
+
+#### Namespace Scope
+
+To ensure the operator does not have access to secrets or resource beyond the namespace, the Helm chart scopes the operator's deployment to a namespace.
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terraform-k8s
+spec:
+  # some sections omitted for clarity
+  template:
+    metadata:
+      labels:
+        name: terraform-k8s
+    spec:
+      serviceAccountName: terraform-k8s
+      containers:
+        - name: terraform-k8s
+          command:
+          - /bin/terraform-k8s
+          - "--k8s-watch-namespace=$(POD_NAMESPACE)"
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+```
+
+When deploying, if you want to explicitly watch all namespaces, 
+then you'll need to set `watchAllNamespaces: true`. Otherwise, 
+the default behaviour will be to watch the Release namespace or 
+the namespace provided in the `k8WatchNamespace` value.
