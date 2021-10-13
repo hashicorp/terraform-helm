@@ -35,6 +35,10 @@ syncWorkspace:
   # to the release namespace
   k8WatchNamespace: null
 
+  # If true watchAllNamespaces will configure the operator to watch for workspace
+  # changes across all kubernetes namespaces.
+  watchAllNamespaces: false
+
   # terraformVersion describes the version of Terraform to use for each workspace.
   # If this is not set then it will default to the latest version of Terraform
   # compiled with the operator.
