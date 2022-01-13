@@ -25,6 +25,9 @@ syncWorkspace:
   enabled: "-"
   image: null
 
+  # If true expose the pod port 8383 to be used by prometheus-operator PodMonitor
+  exposeMetricsPort: false
+
   # If true it disables certificate validation for all outbound HTTPS connections
   # the operator has to do. It can be used when connecting to TFE instances with
   # self-signed certificates

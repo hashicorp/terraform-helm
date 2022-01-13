@@ -70,6 +70,11 @@ spec:
             {{- if .Values.syncWorkspace.logLevel }}
             - --zap-log-level={{ .Values.syncWorkspace.logLevel }}
             {{- end }}
+          {{- if .Values.syncWorkspace.exposeMetricsPort }}
+          ports:
+            - containerPort: 8383
+              protocol: TCP
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /metrics
