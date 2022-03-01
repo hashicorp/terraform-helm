@@ -75,4 +75,11 @@ rules:
   - workspaces
   verbs:
   - '*'
+- apiGroups:
+    - coordination.k8s.io
+  resources:
+    - leases
+  verbs:
+    - get
+    - update
 {{- end }}
