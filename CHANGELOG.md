@@ -1,3 +1,9 @@
+## 1.1.1 (July 14, 2022)
+
+* Update operator image to `v1.1.1`
+* Update CRD schema to `apiextensions.k8s.io/v1`
+* Add new RBAC permissions `create`, `get`, `update` for API group `coordination.k8s.io`, resource `leases`
+
 ## 1.1.0 (Sep 10, 2021)
 
 * Update terraform-k8s to v1.1.0
