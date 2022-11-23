@@ -1,3 +1,7 @@
+## 1.1.2 (November 22, 2022)
+
+* Update operator image to `v1.1.2`
+
 ## 1.1.1 (July 14, 2022)
 
 * Update operator image to `v1.1.1`
