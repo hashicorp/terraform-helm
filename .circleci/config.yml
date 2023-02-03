@@ -27,12 +27,19 @@ jobs:
               exit 1
             fi
       - run:
+          name: install gh tool
+          command: |
+            version="2.22.1"
+            curl --show-error --silent --location --output "gh.tar.gz" "https://github.com/cli/cli/releases/download/v${version}/gh_${version}_linux_amd64.tar.gz"
+            tar -xvzf gh.tar.gz && mkdir -p bin && mv "gh_${version}_linux_amd64/bin/gh" bin/
+            
+      - run:
           name: update helm-charts index
           command: |
             export GITHUB_TOKEN="${HELM_CHARTS_GITHUB_TOKEN}"
             gh workflow run .github/workflows/publish-charts.yml \
               --repo hashicorp/helm-charts \
-              --ref templates_default_test \
+              --ref main \
               -f SOURCE_TAG="${CIRCLE_TAG}" \
               -f SOURCE_REPO="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
       - slack/status:
