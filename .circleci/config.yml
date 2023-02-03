@@ -29,12 +29,12 @@ jobs:
       - run:
           name: update helm-charts index
           command: |
-            curl --show-error --silent --fail --user "${CIRCLE_TOKEN}:" \
-                -X POST \
-                -H 'Content-Type: application/json' \
-                -H 'Accept: application/json' \
-                -d "{\"branch\": \"main\",\"parameters\":{\"SOURCE_REPO\": \"${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}\",\"SOURCE_TAG\": \"${CIRCLE_TAG}\"}}" \
-                "${CIRCLE_ENDPOINT}/${CIRCLE_PROJECT}/pipeline"
+            export GITHUB_TOKEN="${HELM_CHARTS_GITHUB_TOKEN}"
+            gh workflow run .github/workflows/publish-charts.yml \
+              --repo hashicorp/helm-charts \
+              --ref templates_default_test \
+              -f SOURCE_TAG="${CIRCLE_TAG}" \
+              -f SOURCE_REPO="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
       - slack/status:
           fail_only: true
           failure_message: "Failed to trigger an update to the helm charts index. Check the logs at: ${CIRCLE_BUILD_URL}"
