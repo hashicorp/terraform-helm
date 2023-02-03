@@ -1,6 +1,6 @@
 version: 2.1
-orbs:
-  slack: circleci/slack@3.4.2
+# orbs:
+#   slack: circleci/slack@3.4.2
 
 jobs:
   unit:
@@ -14,6 +14,8 @@ jobs:
   update-helm-charts-index:
     docker:
       - image: docker.mirror.hashicorp.services/circleci/golang:latest
+    environment:
+      CIRCLE_TAG: v1.1.2 
     steps:
       - checkout
       - run:
@@ -27,17 +29,24 @@ jobs:
               exit 1
             fi
       - run:
+          name: install gh tool
+          command: |
+            version="2.22.1"
+            curl --show-error --silent --location --output "gh.tar.gz" "https://github.com/cli/cli/releases/download/v${version}/gh_${version}_linux_amd64.tar.gz"
+            tar -xvzf gh.tar.gz && mkdir -p bin && mv "gh_${version}_linux_amd64/bin/gh" bin/
+
+      - run:
           name: update helm-charts index
           command: |
             export GITHUB_TOKEN="${HELM_CHARTS_GITHUB_TOKEN}"
-            gh workflow run .github/workflows/publish-charts.yml \
+            ./bin/gh workflow run .github/workflows/publish-charts.yml \
               --repo hashicorp/helm-charts \
               --ref templates_default_test \
               -f SOURCE_TAG="${CIRCLE_TAG}" \
               -f SOURCE_REPO="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-      - slack/status:
-          fail_only: true
-          failure_message: "Failed to trigger an update to the helm charts index. Check the logs at: ${CIRCLE_BUILD_URL}"
+      # - slack/status:
+      #     fail_only: true
+      #     failure_message: "Failed to trigger an update to the helm charts index. Check the logs at: ${CIRCLE_BUILD_URL}"
 
 workflows:
   version: 2
@@ -48,8 +57,8 @@ workflows:
     jobs:
       - update-helm-charts-index:
           context: helm-charts-trigger-terraform
-          filters:
-            tags:
-              only: /^v.*/ # only triggers updating of the helm index on tags
-            branches:
-              ignore: /.*/ # don't trigger helm index update on any branch
+          # filters:
+          #   tags:
+          #     only: /^v.*/ # only triggers updating of the helm index on tags
+          #   branches:
+          #     ignore: /.*/ # don't trigger helm index update on any branch
