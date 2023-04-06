@@ -1,0 +1,16 @@
+name: hashicorp/terraform-helm/test
+on:
+  push:
+    branches:
+    - main
+env:
+  SLACK_WEBHOOK: xxxxxxx
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    container:
+      image: docker.mirror.hashicorp.services/hashicorpdev/terraform-helm-test:0.1.0
+    steps:
+    - uses: actions/checkout@v3.5.0
+    - name: Run Unit Tests
+      run: bats ./test/unit
