@@ -35,10 +35,10 @@ jobs:
             -f SOURCE_TAG="${{ github.ref_name }}" \
             -f SOURCE_REPO="${{ github.repository }}"
 
-      # - name: send slack status
-      #   if: failure()
-      #   env:
-      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
-      #   uses: hashicorp/slack-action@v1
-      #   with:
-      #     failure_message: "Failed to trigger an update to the helm charts index."
+      - name: send slack status
+        if: failure()
+        uses: hashicorp/actions-slack-status@v1
+        with:
+          status: "failure"
+          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
+          failure_message: "Failed to trigger an update to the helm charts index."
