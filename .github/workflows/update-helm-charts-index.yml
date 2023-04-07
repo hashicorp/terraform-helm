@@ -1,43 +1,44 @@
-name: hashicorp/terraform-helm/update-helm-charts-index
+name: update-helm-charts-index
 on:
   push:
-    branches:
-      - main
-env:
-  SLACK_WEBHOOK: xxxxxxx
+    tags:
+      - "v.*"
+
+permissions:
+  contents: read
+
 jobs:
   update-helm-charts-index:
-    if: # GitHub does not currently support regular expressions inside if conditions
-    #         (github.ref == 'refs/tags//^v.*/') && (github.ref != 'refs/heads//.*/')
     runs-on: ubuntu-latest
-    container:
-      image: docker.mirror.hashicorp.services/circleci/golang:latest
     steps:
       - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+
       - name: verify Chart version matches tag version
+        env:
+          ref_name: ${{ github.ref_name }}
         run: |-
-          GO111MODULE=on go get github.com/mikefarah/yq/v2
-          git_tag=$(echo "${${{ github.ref }}#v}")
-          chart_tag=$(yq r Chart.yaml version)
+          chart_tag="$(yq '.version' Chart.yaml)"
+          git_tag="${ref_name#v}"
           if [ "${git_tag}" != "${chart_tag}" ]; then
-            echo "chart version (${chart_tag}) did not match git version (${git_tag})"
+            message="chart version (${chart_tag}) did not match git version (${git_tag})"
+            echo "::error title=Version Mismatch::${message}"
+            echo "${message}"
             exit 1
           fi
-      - name: install gh tool
-        run: |-
-          version="2.22.1"
-          curl --show-error --silent --location --output "gh.tar.gz" "https://github.com/cli/cli/releases/download/v${version}/gh_${version}_linux_amd64.tar.gz"
-          tar -xvzf gh.tar.gz && mkdir -p bin && mv "gh_${version}_linux_amd64/bin/gh" bin/
+
       - name: update helm-charts index
         run: |-
           export GITHUB_TOKEN="${HELM_CHARTS_GITHUB_TOKEN}"
           ./bin/gh workflow run publish-charts.yml \
             --repo hashicorp/helm-charts \
             --ref main \
-            -f SOURCE_TAG="${{ github.ref }}" \
-            -f SOURCE_REPO="${CIRCLE_PROJECT_USERNAME}/${{ github.repository }}"
-#     # This item has no matching transformer
-#     - circleci_slack_status:
+            -f SOURCE_TAG="${{ github.ref_name }}" \
+            -f SOURCE_REPO="${{ github.repository }}"
 
-permissions:
-  contents: read
+      # - name: send slack status
+      #   if: failure()
+      #   env:
+      #     SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      #   uses: hashicorp/slack-action@v1
+      #   with:
+      #     failure_message: "Failed to trigger an update to the helm charts index."
