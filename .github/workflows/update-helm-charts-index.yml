@@ -27,8 +27,9 @@ jobs:
           fi
 
       - name: update helm-charts index
+        env:
+          GH_TOKEN: ${{ secrets.HELM_CHARTS_GITHUB_TOKEN }}
         run: |-
-          export GITHUB_TOKEN="${HELM_CHARTS_GITHUB_TOKEN}"
           ./bin/gh workflow run publish-charts.yml \
             --repo hashicorp/helm-charts \
             --ref main \
