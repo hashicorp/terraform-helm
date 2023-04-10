@@ -41,5 +41,5 @@ jobs:
         uses: hashicorp/actions-slack-status@v1
         with:
           status: "failure"
-          slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
-          failure_message: "Failed to trigger an update to the helm charts index."
+          slack-webhook-url: ${{ secrets.SLACK_WEBHOOK }}
+          failure-message: "Failed to trigger an update to the helm charts index."
