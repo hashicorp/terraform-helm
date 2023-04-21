@@ -1,0 +1,18 @@
+name: hashicorp/terraform-helm/test
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    container:
+      image: docker.mirror.hashicorp.services/hashicorpdev/terraform-helm-test:0.1.0
+    steps:
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3.5.0
+      - name: Run Unit Tests
+        run: bats ./test/unit
