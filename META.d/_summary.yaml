@@ -1,0 +1,12 @@
+---
+
+schema: 1.1
+
+partition: tf-ecosystem
+
+summary:
+  owner: team-tf-hybrid-cloud
+  description: |
+    This repo houses the Helm chart to install Terraform Cloud Operator and other associated components.
+  
+  visibility: external 
