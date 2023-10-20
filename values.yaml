@@ -8,6 +8,9 @@ global:
   # opt-in is required, such as by setting `syncWorkspace.enabled` to true.
   enabled: true
 
+  # Used to override Release.Namespace
+  namespace: null
+
   # imageK8S is the name (and tag) of the terraform-k8s Docker image that
   # is used for functionality such as workspace sync. This can be overridden
   # per component.
@@ -50,12 +53,12 @@ syncWorkspace:
   # logLevel: error
 
   # Name and key of Kubernetes secret containing the Terraform CLI Configuration
-  # Must have Terraform Cloud Team API Token 
+  # Must have Terraform Cloud Team API Token
   terraformRC:
     secretName: terraformrc
     secretKey: credentials
 
-  # Name of Kubernetes secret containing keys and values of sensitive variables 
+  # Name of Kubernetes secret containing keys and values of sensitive variables
   sensitiveVariables:
     secretName: workspacesecrets
 
@@ -69,7 +72,7 @@ tests:
   # moduleSource: git::https://github.com/hashicorp/terraform-helm.git//test/module
 
 # If the TFE instance the operator talks to is using a private CA then CACerts
-# can be used to install a custom CA bundle in the operator's container that 
+# can be used to install a custom CA bundle in the operator's container that
 # will allow it to communicate with TFE.
 #
 # CACerts can be set like this:
