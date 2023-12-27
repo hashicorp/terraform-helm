@@ -1,4 +1,4 @@
-## 1.1.3 (November 27, 2023)
+## 1.1.3 (December 27, 2023)
 
 * Add `resource` specification in deployment manifest
 
