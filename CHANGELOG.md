@@ -1,3 +1,7 @@
+## 1.1.3 (November 27, 2023)
+
+* Add `resource` specification in deployment manifest
+
 ## 1.1.2 (November 22, 2022)
 
 * Update operator image to `v1.1.2`

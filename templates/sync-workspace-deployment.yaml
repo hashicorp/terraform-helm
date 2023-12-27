@@ -90,6 +90,10 @@ spec:
             periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 5
+          {{- if .Values.syncWorkspace.resources }}
+          resources:
+            {{- toYaml .Values.syncWorkspace.resources | nindent 12 }}
+          {{- end }}
       volumes:
         {{- if .Values.CACerts}}
         - name: cacert
