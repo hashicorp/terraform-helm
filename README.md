@@ -1,3 +1,17 @@
+# terraform-helm - DEPRECATED
+
+⚠️ **This repository is deprecated and no longer actively maintained.** ⚠️
+
+We strongly encourage users to migrate to the **[HCP Terraform Operator](https://github.com/hashicorp/hcp-terraform-operator)** for a more comprehensive, scalable, and supported solution.
+
+### Why this change?
+The HCP Terraform Operator provides advanced integration and ongoing support, offering a significantly improved experience for managing your HCP Terraform workflows with Kubernetes.
+
+### Migration Guide
+For details on migrating your existing setup, please refer to our comprehensive [Migration Guide](https://developer.hashicorp.com/terraform/cloud-docs/integrations/kubernetes/ops-v2-migration).
+
+---
+
 # Terraform Cloud Operator Helm Chart
 
 This repository contains the official HashiCorp Helm chart for installing
