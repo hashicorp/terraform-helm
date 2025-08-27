@@ -75,3 +75,5 @@ tests:
 # CACerts can be set like this:
 # helm install <other parameters> --set-file CACerts=/path/to/certs.pem
 CACerts: ""
+
+nodeSelector: {}
