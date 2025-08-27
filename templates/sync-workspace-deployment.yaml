@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "terraform.fullname" . }}-sync-workspace
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ default .Release.Namespace .Values.global.namespace }}
   labels:
     app: {{ template "terraform.name" . }}
     chart: {{ template "terraform.chart" . }}

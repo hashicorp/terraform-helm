@@ -5,11 +5,12 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: {{ $kind }}
 metadata:
   name: {{ template "terraform.fullname" . }}-sync-workspace
+  namespace: {{ default .Release.Namespace .Values.global.namespace }}
   labels:
     app: {{ template "terraform.name" . }}
     chart: {{ template "terraform.chart" . }}
     heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}    
+    release: {{ .Release.Name }}
 rules:
 - apiGroups:
   - ""
